@@ -18,7 +18,6 @@ Create game setup page `pages/index.js`. This page will have a form to create a 
 
 > Form fields:
 >
-> - Player name
 > - Enter a word or randomize a word
 > - Play button
 
@@ -33,6 +32,9 @@ Create game page `pages/game.js`. This page will have the following:
 > - A list of letters that have been submitted
 > - A gallows image that will change based on the number of incorrect guesses
 >   - If max number of incorrect guesses is reached, the game is over
+> - A list of blanks that will be filled in as correct letters are guessed
+> - A message that will display if the game is over and if the player won or lost
+>   - An input field to enter a name on game over (for leaderboard)
 
 The word will be taken from an api call to `https://wordsapiv1.p.mashape.com/words/example`. Where `example` is the word that was entered on the setup page. The URL will have a query `?word=` lightly encrypted using the `cryptr` package. Encryption is done to prevent cheating by looking at the page source.
 
