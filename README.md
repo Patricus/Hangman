@@ -1,38 +1,45 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 ## Getting Started
 
 First, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+---
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+## Pages
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+### Setup
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Create game setup page `pages/index.js`. This page will have a form to create a new game.
 
-## Learn More
+> Form fields:
+>
+> - Player name
+> - Enter a word or randomize a word
+> - Play button
 
-To learn more about Next.js, take a look at the following resources:
+This page will also have a link to the leaderboard page.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Game
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Create game page `pages/word/[word].js`. This page will have the following:
 
-## Deploy on Vercel
+> - An input field to enter a word
+> - A button to submit the word
+> - A list of words that have been submitted
+> - A gallows image that will change based on the number of incorrect guesses
+>   - If max number of incorrect guesses is reached, the game is over
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The word will be taken from an api call to `https://wordsapiv1.p.mashape.com/words/example`. Where `example` is the word that was entered and encrypted on the setup page, but lightly encrypted using the `cryptr` package. Encryption is done to prevent cheating by looking at the page source.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+> [Cryptr](https://www.npmjs.com/package/cryptr)
+>
+> [Words API](https://www.wordsapi.com/)
+
+### Leaderboard
+
+Create leaderboard page `pages/leaderboard.js`. This page will have a list of players their scores, number of incorrect guesses and the word. The scores will be stored in a database.
