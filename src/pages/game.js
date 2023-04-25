@@ -4,11 +4,14 @@ import { useRouter } from "next/router";
 import Cryptr from "cryptr";
 
 function Game() {
+  const router = useRouter();
+  const cryptr = new Cryptr("HangmanGame", { pbkdf2Iterations: 1 });
+
+  const wordInitialized = useRef(false);
   const [word, setWord] = useState("");
   const [encryptedWord, setEncryptedWord] = useState("");
-  const router = useRouter();
-  const wordInitialized = useRef(false);
-  const cryptr = new Cryptr("HangmanGame", { pbkdf2Iterations: 1 });
+  const [guessedLetters, setGuessedLetters] = useState([]);
+  const [guesses, setGuesses] = useState(0);
 
   // Set the word from the query string if it exists
   useEffect(() => {
@@ -34,6 +37,11 @@ function Game() {
       router.push(`?word=${encryptedWord}`, undefined, { shallow: true });
     }
   }
+
+  // Initialize guessedLetters with the word
+  useEffect(() => {
+    setGuessedLetters(Array(word.length).fill(" "));
+  }, [word]);
 
   return (
     <div>
