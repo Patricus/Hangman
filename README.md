@@ -26,15 +26,15 @@ This page will also have a link to the leaderboard page.
 
 ### Game
 
-Create game page `pages/word/[word].js`. This page will have the following:
+Create game page `pages/game.js`. This page will have the following:
 
-> - An input field to enter a word
-> - A button to submit the word
-> - A list of words that have been submitted
+> - An input field to enter a letter
+> - A button to submit the letter
+> - A list of letters that have been submitted
 > - A gallows image that will change based on the number of incorrect guesses
 >   - If max number of incorrect guesses is reached, the game is over
 
-The word will be taken from an api call to `https://wordsapiv1.p.mashape.com/words/example`. Where `example` is the word that was entered and encrypted on the setup page, but lightly encrypted using the `cryptr` package. Encryption is done to prevent cheating by looking at the page source.
+The word will be taken from an api call to `https://wordsapiv1.p.mashape.com/words/example`. Where `example` is the word that was entered on the setup page. The URL will have a query `?word=` lightly encrypted using the `cryptr` package. Encryption is done to prevent cheating by looking at the page source.
 
 > [Cryptr](https://www.npmjs.com/package/cryptr)
 >

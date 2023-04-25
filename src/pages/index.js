@@ -1,3 +1,5 @@
+// This is the setup for the game page
+
 import Head from "next/head";
 
 export default function Home() {
