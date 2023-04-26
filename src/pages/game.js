@@ -1,7 +1,10 @@
 // This is the game page
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
+import Image from "next/image";
 import Cryptr from "cryptr";
+import gallows from "public/images/gallows.svg";
+import man from "public/images/hangmanfigure.svg";
 
 function Game() {
   const router = useRouter();
@@ -61,6 +64,14 @@ function Game() {
     inputRef.current.focus();
   }
 
+  // Check if the game is over
+  function handleGameOver() {
+    if (guesses >= 6) {
+      return true;
+    }
+    return word.split("").every(letter => guessedLetters.includes(letter));
+  }
+
   return (
     <div>
       <p>Selected word: {word}</p>
@@ -69,6 +80,17 @@ function Game() {
         <div>
           <h3>Missed letters:</h3>
           <p>{guessedLetters.filter(letter => !word.includes(letter)).join(", ")}</p>
+        </div>
+        <div className=" flex justify-center w-screen h-fit">
+          <div className="relative">
+            <Image src={gallows} alt="Gallows" width={500} />
+            <Image
+              src={man}
+              alt="Hangman"
+              width={80}
+              className="absolute bottom-14 right-[4.7rem] "
+            />
+          </div>
         </div>
       </section>
       <section className="bg-slate-200 h-20 mx-10 flex justify-center items-center gap-5">
