@@ -36,11 +36,13 @@ Create game page `pages/game.js`. This page will have the following:
 > - A message that will display if the game is over and if the player won or lost
 >   - An input field to enter a name on game over (for leaderboard)
 
-The word will be taken from an api call to `https://wordsapiv1.p.mashape.com/words/example`. Where `example` is the word that was entered on the setup page. The URL will have a query `?word=` lightly encrypted using the `cryptr` package. Encryption is done to prevent cheating by looking at the page source.
+The word will be taken from an api call to `https://api.api-ninjas.com/v1/randomword`. The URL will have a query `?word=` lightly encrypted using the `cryptr` package. Encryption is done to prevent cheating by looking at the page source.
 
 > [Cryptr](https://www.npmjs.com/package/cryptr)
 >
-> [Words API](https://www.wordsapi.com/)
+> [Words API](https://api-ninjas.com/)
+> Create an account and get an API key. Use the API key in your .env.local file.
+> **Note:** The Words API is free for 50,000 requests per month. If you go over that, you will be charged.
 
 ### Leaderboard
 
