@@ -11,7 +11,7 @@ function Game() {
   const router = useRouter();
   const cryptr = new Cryptr("HangmanGame", { pbkdf2Iterations: 1, saltLength: 0 });
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
   const inputRef = useRef(null);
   const [word, setWord] = useState("");
   const [encryptedWord, setEncryptedWord] = useState(null);
@@ -20,48 +20,50 @@ function Game() {
   const [guess, setGuess] = useState("");
   const [won, setWon] = useState(false);
 
-  // Check loading
-  useEffect(() => {
-    if (router.isReady && router.query && router.query.word !== undefined) setIsLoading(false);
-  }, [router]);
+  // Fetch a random word from the API
+  async function randomWord() {
+    if (isFetching) return;
+    setIsFetching(true);
+    const response = await fetch("/api/randomWord");
+    const data = await response.json();
+    setEncryptedWord(cryptr.encrypt(data.word));
+  }
 
   // Focus the input field on load
   useEffect(() => {
     inputRef.current.focus();
   }, []);
 
-  // Set the word from the query string if it exists
+  // Check query params for a word
   useEffect(() => {
-    if (!isLoading) {
+    if (router.isReady) {
       const { word } = router.query;
-      // if (word === null) randomWord();
-      try {
-        setWord(cryptr.decrypt(word).toLowerCase());
-      } catch (error) {
-        // If the word is invalid, fetch a random word
-        randomWord();
+      if (word && word.length > 0) {
+        try {
+          cryptr.decrypt(word);
+          setEncryptedWord(word);
+        } catch (error) {
+          setEncryptedWord("");
+          return;
+        }
       }
     }
-  }, [isLoading]);
+  }, [router]);
 
-  // Fetch a random word from the API
-  async function randomWord() {
-    const response = await fetch("/api/randomWord");
-    const data = await response.json();
-    setEncryptedWord(cryptr.encrypt(data.word));
-  }
-
-  // Update the query string and decrypt the word
+  // New encrypted word
   useEffect(() => {
-    if (!encryptedWord) return;
+    if (encryptedWord === null) return;
+    if (encryptedWord === "") {
+      randomWord();
+      return;
+    }
+    isFetching && setIsFetching(false);
+
     router.push(`?word=${encryptedWord}`, undefined, { shallow: true });
     setWord(cryptr.decrypt(encryptedWord));
-  }, [encryptedWord]);
-
-  // Initialize guessedLetters with the word
-  useEffect(() => {
     setGuessedLetters([]);
-  }, [word]);
+    setWrongGuesses(0);
+  }, [encryptedWord]);
 
   // Handle the guess input
   function handleGuess(event) {
@@ -71,12 +73,12 @@ function Game() {
       setGuessedLetters(guessedLetters => [...guessedLetters, letter]);
     }
     setGuess("");
-    if (!wrongGuesses > 5 || won) inputRef.current.focus();
+    if (wrongGuesses < 6 || won) inputRef.current.focus();
   }
 
   // Handle win
   useEffect(() => {
-    setWon(word.split("").every(letter => guessedLetters.includes(letter)));
+    setWon(word.length > 0 && word.split("").every(letter => guessedLetters.includes(letter)));
   }, [guessedLetters]);
 
   return (
@@ -91,7 +93,7 @@ function Game() {
         </div>
         <div className=" flex justify-center w-screen h-fit">
           <div className="relative">
-            <Image src={gallows} alt="Gallows" width={500} />
+            <Image src={gallows} alt="Gallows" width={500} priority />
             <div className="absolute bottom-14 right-[4.7rem] -z-10">
               <div
                 className={`${
