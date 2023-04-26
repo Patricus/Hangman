@@ -129,7 +129,7 @@ function Game() {
           </div>
         </div>
       </section>
-      <section className="bg-slate-200 h-20 mx-10 flex justify-center items-center gap-5">
+      <section className="bg-slate-200 h-20 md:mx-10 flex justify-center items-center gap-5">
         {word &&
           word.split("").map((letter, index) => (
             <p
@@ -139,7 +139,7 @@ function Game() {
             </p>
           ))}
       </section>
-      <section className="bg-slate-200 mx-10 flex flex-col items-center h-24 border-t-2 border-slate-400">
+      <section className="bg-slate-200 md:mx-10 flex flex-col items-center h-24 border-t-2 border-slate-400">
         <h2 className="text-lg font-bold">Wrong Guesses</h2>
         <div className="flex justify-center items-center gap-5">
           {guessedLetters &&
