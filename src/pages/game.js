@@ -5,48 +5,58 @@ import Image from "next/image";
 import Cryptr from "cryptr";
 import gallows from "public/images/gallows.svg";
 import man from "public/images/hangmanfigure.svg";
+import GameOverModal from "../components/gameOverModal";
 
 function Game() {
   const router = useRouter();
   const cryptr = new Cryptr("HangmanGame", { pbkdf2Iterations: 1, saltLength: 0 });
 
-  const wordInitialized = useRef(false);
+  const [isLoading, setIsLoading] = useState(true);
   const inputRef = useRef(null);
   const [word, setWord] = useState("");
   const [encryptedWord, setEncryptedWord] = useState(null);
   const [guessedLetters, setGuessedLetters] = useState([]);
   const [wrongGuesses, setWrongGuesses] = useState(0);
   const [guess, setGuess] = useState("");
+  const [won, setWon] = useState(false);
+
+  // Check loading
+  useEffect(() => {
+    if (router.isReady && router.query && router.query.word !== undefined) setIsLoading(false);
+  }, [router]);
+
+  // Focus the input field on load
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
   // Set the word from the query string if it exists
   useEffect(() => {
-    if (router.isReady) {
-      const query = router.query;
-      if (query.word) {
-        try {
-          setWord(cryptr.decrypt(query.word).toLowerCase());
-          wordInitialized.current = true;
-        } catch (error) {
-          // If the word is invalid, fetch a random word
-          randomWord();
-        }
-      } else if (!wordInitialized.current) {
-        // If there is no word in the query string, fetch a random word
+    if (!isLoading) {
+      const { word } = router.query;
+      // if (word === null) randomWord();
+      try {
+        setWord(cryptr.decrypt(word).toLowerCase());
+      } catch (error) {
+        // If the word is invalid, fetch a random word
         randomWord();
       }
     }
-  }, [router]);
+  }, [isLoading]);
 
   // Fetch a random word from the API
   async function randomWord() {
     const response = await fetch("/api/randomWord");
     const data = await response.json();
     setEncryptedWord(cryptr.encrypt(data.word));
-    setWord(data.word);
-    if (encryptedWord !== router.query.word) {
-      router.push(`?word=${encryptedWord}`, undefined, { shallow: true });
-    }
   }
+
+  // Update the query string and decrypt the word
+  useEffect(() => {
+    if (!encryptedWord) return;
+    router.push(`?word=${encryptedWord}`, undefined, { shallow: true });
+    setWord(cryptr.decrypt(encryptedWord));
+  }, [encryptedWord]);
 
   // Initialize guessedLetters with the word
   useEffect(() => {
@@ -61,25 +71,23 @@ function Game() {
       setGuessedLetters(guessedLetters => [...guessedLetters, letter]);
     }
     setGuess("");
-    inputRef.current.focus();
+    if (!wrongGuesses > 5 || won) inputRef.current.focus();
   }
 
-  // Check if the game is over
-  function handleGameOver() {
-    if (wrongGuesses >= 6) {
-      return true;
-    }
-    return word.split("").every(letter => guessedLetters.includes(letter));
-  }
+  // Handle win
+  useEffect(() => {
+    setWon(word.split("").every(letter => guessedLetters.includes(letter)));
+  }, [guessedLetters]);
 
   return (
     <div>
+      {(wrongGuesses > 5 || won) && <GameOverModal win={won} newGame={randomWord} />}
       <p>Selected word: {word}</p>
       <section>
         <h2>Number of wrong guesses: {wrongGuesses}</h2>
         <div>
           <h3>Missed letters:</h3>
-          <span>{guessedLetters.filter(letter => !word.includes(letter)).join(", ")}</span>
+          <p>{guessedLetters.filter(letter => !word.includes(letter)).join(", ")}</p>
         </div>
         <div className=" flex justify-center w-screen h-fit">
           <div className="relative">
