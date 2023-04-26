@@ -9,7 +9,7 @@ function Game() {
 
   const wordInitialized = useRef(false);
   const [word, setWord] = useState("");
-  const [encryptedWord, setEncryptedWord] = useState("");
+  const [encryptedWord, setEncryptedWord] = useState(null);
   const [guessedLetters, setGuessedLetters] = useState([]);
   const [guesses, setGuesses] = useState(0);
 
@@ -18,8 +18,13 @@ function Game() {
     if (router.isReady) {
       const query = router.query;
       if (query.word) {
-        setWord(cryptr.decrypt(query.word));
-        wordInitialized.current = true;
+        try {
+          setWord(cryptr.decrypt(query.word));
+          wordInitialized.current = true;
+        } catch (error) {
+          // If the word is invalid, fetch a random word
+          randomWord();
+        }
       } else if (!wordInitialized.current) {
         // If there is no word in the query string, fetch a random word
         randomWord();
