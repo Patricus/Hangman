@@ -40,7 +40,6 @@ export default function Home() {
             </Link>
           </div>
         </div>
-        <div>{word && <Hangman word={word} />}</div>
       </main>
     </>
   );
