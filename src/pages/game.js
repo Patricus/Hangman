@@ -15,7 +15,7 @@ function Game() {
   const [word, setWord] = useState("");
   const [encryptedWord, setEncryptedWord] = useState(null);
   const [guessedLetters, setGuessedLetters] = useState([]);
-  const [guesses, setGuesses] = useState(0);
+  const [wrongGuesses, setWrongGuesses] = useState(0);
   const [guess, setGuess] = useState("");
 
   // Set the word from the query string if it exists
@@ -57,7 +57,7 @@ function Game() {
   function handleGuess(event) {
     const letter = event.target.value.split("")[0].toLowerCase();
     if (!guessedLetters.includes(letter)) {
-      setGuesses(guesses => guesses + 1);
+      if (!word.includes(letter)) setWrongGuesses(wrongGuesses => wrongGuesses + 1);
       setGuessedLetters(guessedLetters => [...guessedLetters, letter]);
     }
     setGuess("");
@@ -66,7 +66,7 @@ function Game() {
 
   // Check if the game is over
   function handleGameOver() {
-    if (guesses >= 6) {
+    if (wrongGuesses >= 6) {
       return true;
     }
     return word.split("").every(letter => guessedLetters.includes(letter));
@@ -76,20 +76,41 @@ function Game() {
     <div>
       <p>Selected word: {word}</p>
       <section>
-        <h2>Number of guesses: {guesses}</h2>
+        <h2>Number of wrong guesses: {wrongGuesses}</h2>
         <div>
           <h3>Missed letters:</h3>
-          <p>{guessedLetters.filter(letter => !word.includes(letter)).join(", ")}</p>
+          <span>{guessedLetters.filter(letter => !word.includes(letter)).join(", ")}</span>
         </div>
         <div className=" flex justify-center w-screen h-fit">
           <div className="relative">
             <Image src={gallows} alt="Gallows" width={500} />
-            <Image
-              src={man}
-              alt="Hangman"
-              width={80}
-              className="absolute bottom-14 right-[4.7rem] "
-            />
+            <div className="absolute bottom-14 right-[4.7rem] -z-10">
+              <div
+                className={`${
+                  wrongGuesses > 0 && "scale-y-0"
+                } transition-transform origin-bottom duration-1000 absolute w-20 h-[80px] bg-white`}></div>
+              <div
+                className={`${
+                  wrongGuesses > 1 && "scale-y-0"
+                } transition-transform origin-bottom duration-1000 absolute w-3 h-[80px] left-8 top-20 bg-white`}></div>
+              <div
+                className={`${
+                  wrongGuesses > 2 && "scale-y-0"
+                } transition-transform origin-bottom duration-1000 absolute w-[35px] h-[80px] left-0 top-20 bg-white`}></div>
+              <div
+                className={`${
+                  wrongGuesses > 3 && "scale-y-0"
+                } transition-transform origin-bottom duration-1000 absolute w-[41px] h-[80px]  right-0 top-20 bg-white`}></div>
+              <div
+                className={`${
+                  wrongGuesses > 4 && "scale-y-0"
+                } transition-transform origin-bottom duration-1000 absolute w-[44px] h-[45px]  left-0 bottom-0 bg-white`}></div>
+              <div
+                className={`${
+                  wrongGuesses > 5 && "scale-y-0"
+                } transition-transform origin-bottom duration-1000 absolute w-[44px] h-[45px]  right-0 bottom-0 bg-white`}></div>
+              <Image src={man} alt="Hangman" width={80} className="-z-10" />
+            </div>
           </div>
         </div>
       </section>
