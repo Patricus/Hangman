@@ -1,11 +1,11 @@
 import React from "react";
 
-function gameOverModal({ guessedLetters, wrongGuesses, word, win, newGame }) {
+function gameOverModal({ guessedLetters, wrongGuesses, word, won, newGame }) {
   return (
     <section className="absolute w-screen h-screen z-50">
       <div className="w-full h-full bg-neutral-600 opacity-40"></div>
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2/3 h-2/3 bg-slate-50 rounded flex flex-col items-center justify-around">
-        <h2 className="text-3xl font-bold">{`${win ? "WINNER" : "GAME OVER"}!`}</h2>
+        <h2 className="text-3xl font-bold">{`${won ? "WINNER" : "GAME OVER"}!`}</h2>
         <div>
           <span className="text-lg">{`The word was `}</span>
           {word.split("").map((letter, index) => (
@@ -34,7 +34,7 @@ function gameOverModal({ guessedLetters, wrongGuesses, word, win, newGame }) {
             className="transition-color font-bold rounded p-1 bg-blue-600 hover:bg-blue-500">
             New Game!
           </button>
-          {win ? (
+          {won ? (
             <button className="transition-color font-bold rounded p-1 bg-blue-600 hover:bg-blue-500">
               Add to leaderboard
             </button>

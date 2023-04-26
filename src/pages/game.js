@@ -31,7 +31,7 @@ function Game() {
 
   // Focus the input field on load
   useEffect(() => {
-    inputRef.current.focus();
+    if (wrongGuesses < 6 || won) inputRef.current.focus();
   }, []);
 
   // Check query params for a word
@@ -69,13 +69,13 @@ function Game() {
 
   // Handle the guess input
   function handleGuess(event) {
+    if (wrongGuesses > 5 || won) return;
     const letter = event.target.value.split("")[0].toLowerCase();
     if (!guessedLetters.includes(letter)) {
       if (!word.includes(letter)) setWrongGuesses(wrongGuesses => wrongGuesses + 1);
       setGuessedLetters(guessedLetters => [...guessedLetters, letter]);
     }
     setGuess("");
-    if (wrongGuesses < 6 || won) inputRef.current.focus();
   }
 
   // Handle win
@@ -84,22 +84,18 @@ function Game() {
   }, [guessedLetters]);
 
   return (
-    <div>
+    <>
       {(wrongGuesses > 5 || won) && (
         <GameOverModal
           guessedLetters={guessedLetters}
           wrongGuesses={wrongGuesses}
           word={word}
-          win={won}
+          won={won}
           newGame={randomWord}
         />
       )}
       <section>
-        <h2>Number of wrong guesses: {wrongGuesses}</h2>
-        <div>
-          <h3>Missed letters:</h3>
-          <p>{guessedLetters.filter(letter => !word.includes(letter)).join(", ")}</p>
-        </div>
+        <h1 className="text-6xl text-center font-bold">Hangman</h1>
         <div className=" flex justify-center w-screen h-fit">
           <div className="relative">
             <Image src={gallows} alt="Gallows" width={500} />
@@ -136,14 +132,34 @@ function Game() {
       <section className="bg-slate-200 h-20 mx-10 flex justify-center items-center gap-5">
         {word &&
           word.split("").map((letter, index) => (
-            <p key={index} className="bg-slate-100 h-14 w-10 underline border border-slate-700">
+            <p
+              key={index}
+              className="bg-slate-100 h-7 sm:h-9 md:h-11 lg:h-14 w-5 sm:w-7 md:w-8 lg:w-10 border border-slate-700 text-2xl font-bold flex items-center justify-center text-green-700">
               {guessedLetters.includes(letter) ? letter.toUpperCase() : " "}
             </p>
           ))}
       </section>
-      <section>
-        <label htmlFor="guess">Guess a letter:</label>
+      <section className="bg-slate-200 mx-10 flex flex-col items-center h-24 border-t-2 border-slate-400">
+        <h2 className="text-lg font-bold">Wrong Guesses</h2>
+        <div className="flex justify-center items-center gap-5">
+          {guessedLetters &&
+            guessedLetters
+              .filter(letter => !word.includes(letter))
+              .map((letter, index) => (
+                <p
+                  key={index}
+                  className="bg-slate-100 h-7 sm:h-9 md:h-11 lg:h-14 w-5 sm:w-7 md:w-8 lg:w-10 border border-slate-700 text-2xl font-bold flex items-center justify-center text-red-700">
+                  {letter.toUpperCase()}
+                </p>
+              ))}
+        </div>
+      </section>
+      <section className="flex flex-col items-center">
+        <label className="text-xl" htmlFor="guess">
+          Guess a letter:
+        </label>
         <input
+          className="border border-slate-700 w-10 text-2xl text-center rounded"
           type="text"
           id="guess"
           name="guess"
@@ -152,7 +168,7 @@ function Game() {
           ref={inputRef}
         />
       </section>
-    </div>
+    </>
   );
 }
 
