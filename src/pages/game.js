@@ -61,6 +61,8 @@ function Game() {
 
     router.push(`?word=${encryptedWord}`, undefined, { shallow: true });
     setWord(cryptr.decrypt(encryptedWord));
+    //TESTING
+    console.log("word", cryptr.decrypt(encryptedWord));
     setGuessedLetters([]);
     setWrongGuesses(0);
   }, [encryptedWord]);
@@ -83,8 +85,15 @@ function Game() {
 
   return (
     <div>
-      {(wrongGuesses > 5 || won) && <GameOverModal win={won} newGame={randomWord} />}
-      <p>Selected word: {word}</p>
+      {(wrongGuesses > 5 || won) && (
+        <GameOverModal
+          guessedLetters={guessedLetters}
+          wrongGuesses={wrongGuesses}
+          word={word}
+          win={won}
+          newGame={randomWord}
+        />
+      )}
       <section>
         <h2>Number of wrong guesses: {wrongGuesses}</h2>
         <div>
@@ -93,7 +102,7 @@ function Game() {
         </div>
         <div className=" flex justify-center w-screen h-fit">
           <div className="relative">
-            <Image src={gallows} alt="Gallows" width={500} priority />
+            <Image src={gallows} alt="Gallows" width={500} />
             <div className="absolute bottom-14 right-[4.7rem] -z-10">
               <div
                 className={`${
