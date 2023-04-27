@@ -7,14 +7,14 @@ function gameOverModal({ guessedLetters, wrongGuesses, word, won, newGame }) {
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState("");
 
-  function handleAddLeaderboard(e) {
+  async function handleAddLeaderboard(e) {
     e.preventDefault();
     if (name === "") {
       setNameError("Please enter a name");
       return;
     }
     try {
-      fetch("/api/leaderboard", {
+      await fetch("/api/leaderboard", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
