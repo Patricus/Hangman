@@ -17,7 +17,7 @@ function leaderboard() {
   return (
     <>
       <h1 className="text-center text-3xl font-bold">Leaderboard</h1>
-      <div className="absolute w-screen h-screen top-0 left-0 -z-50">
+      <div className="absolute w-screen h-screen top-0 left-0 -z-50 overflow-hidden">
         <div className="absolute w-2/3 h-px left-1/4 top-1/3 animate-[spin_60s_linear_infinite]">
           <div className="absolute left-0 top-0 w-3/4 origin-bottom-left animate-[spin_50s_linear_infinite]">
             <Image
