@@ -96,35 +96,35 @@ function Game() {
       )}
       <section>
         <h1 className="text-6xl text-center font-bold">Hangman</h1>
-        <div className=" flex justify-center w-screen h-fit">
+        <div className=" flex justify-center w-screen">
           <div className="relative">
             <Image src={gallows} alt="Gallows" width={500} />
-            <div className="absolute bottom-14 right-[4.7rem] -z-10">
+            <div className="absolute bottom-[12%] right-[16%] h-[40%] w-[15%] -z-10">
               <div
                 className={`${
                   wrongGuesses > 0 && "scale-y-0"
-                } transition-transform origin-bottom duration-1000 absolute w-20 h-[80px] bg-white`}></div>
+                } transition-transform origin-bottom duration-1000 absolute -top-1 w-full h-[42%] bg-white`}></div>
               <div
                 className={`${
                   wrongGuesses > 1 && "scale-y-0"
-                } transition-transform origin-bottom duration-1000 absolute w-3 h-[80px] left-8 top-20 bg-white`}></div>
+                } transition-transform origin-bottom duration-1000 absolute w-[15%] h-[45%] left-[40%] top-[35%] bg-white`}></div>
               <div
                 className={`${
                   wrongGuesses > 2 && "scale-y-0"
-                } transition-transform origin-bottom duration-1000 absolute w-[35px] h-[80px] left-0 top-20 bg-white`}></div>
+                } transition-transform origin-bottom duration-1000 absolute w-[43%] h-[40%] left-0 top-[40%] bg-white`}></div>
               <div
                 className={`${
                   wrongGuesses > 3 && "scale-y-0"
-                } transition-transform origin-bottom duration-1000 absolute w-[41px] h-[80px]  right-0 top-20 bg-white`}></div>
+                } transition-transform origin-bottom duration-1000 absolute w-[50%] h-[40%]  right-0 top-[40%] bg-white`}></div>
               <div
                 className={`${
                   wrongGuesses > 4 && "scale-y-0"
-                } transition-transform origin-bottom duration-1000 absolute w-[44px] h-[45px]  left-0 bottom-0 bg-white`}></div>
+                } transition-transform origin-bottom duration-1000 absolute w-[45%] h-[24%]  left-0 bottom-0 bg-white`}></div>
               <div
                 className={`${
                   wrongGuesses > 5 && "scale-y-0"
-                } transition-transform origin-bottom duration-1000 absolute w-[44px] h-[45px]  right-0 bottom-0 bg-white`}></div>
-              <Image src={man} alt="Hangman" width={80} className="-z-10" />
+                } transition-transform origin-bottom duration-1000 absolute w-[51%] h-[24%]  right-0 bottom-0 bg-white`}></div>
+              <Image src={man} alt="Hangman" fill className="-z-10" />
             </div>
           </div>
         </div>

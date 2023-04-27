@@ -54,7 +54,7 @@ export default function Home() {
             />
             <small>Leave blank for random word</small>
             <Link href={word.length > 0 ? `/game?word=${cryptr.encrypt(word)}` : "/game"}>
-              <button className="font-semibold transition-colors bg-teal-200 hover:bg-teal-300 rounded-md p-1 ">
+              <button className="font-semibold transition-colors bg-blue-600 hover:bg-blue-500 rounded-md p-1 ">
                 New Game
               </button>
             </Link>

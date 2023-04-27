@@ -1,11 +1,24 @@
-import React from "react";
+import { useState } from "react";
 import Link from "next/link";
 
 function gameOverModal({ guessedLetters, wrongGuesses, word, won, newGame }) {
+  const [name, setName] = useState("");
+  const [nameError, setNameError] = useState("");
+
+  function handleAddLeaderboard(e) {
+    e.preventDefault();
+    if (name === "") {
+      setNameError("Please enter a name");
+      return;
+    }
+    // TODO: Add to leaderboard
+    setNameError("");
+  }
+
   return (
     <section className="absolute w-screen h-screen z-50">
       <div className="w-full h-full bg-neutral-600 opacity-40"></div>
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2/3 h-2/3 bg-slate-50 rounded flex flex-col items-center justify-around">
+      <div className="absolute top-1/2 left-0 sm:left-1/2 transform sm:-translate-x-1/2 -translate-y-1/2 w-full sm:w-2/3 lg:w-[900px] h-2/3 bg-slate-50 rounded flex flex-col items-center justify-around">
         <h2 className="text-3xl font-bold">{`${won ? "WINNER" : "GAME OVER"}!`}</h2>
         <div>
           <span className="text-lg">{`The word was `}</span>
@@ -29,26 +42,43 @@ function gameOverModal({ guessedLetters, wrongGuesses, word, won, newGame }) {
           <span className="text-lg font-bold">{` ${wrongGuesses} `}</span>
           <span className="text-lg">wrong guesses</span>
         </div>
-        <div className="flex justify-evenly w-full">
+        <div className="flex justify-evenly w-full items-end">
           <Link href={"/"}>
             <button className="transition-color font-bold rounded p-1 bg-blue-600 hover:bg-blue-500">
-              Back to Home Page
+              Home Page
             </button>
           </Link>
-          <button
-            onClick={newGame}
-            className="transition-color font-bold rounded p-1 bg-blue-600 hover:bg-blue-500">
-            New Game!
-          </button>
           {won ? (
-            <button className="transition-color font-bold rounded p-1 bg-blue-600 hover:bg-blue-500">
-              Add to leaderboard
-            </button>
+            <form className="relative flex flex-col gap-2 items-center">
+              <label htmlFor="name">Enter name:</label>
+              <input
+                type="text"
+                name="name"
+                id="name"
+                placeholder="Name"
+                value={name}
+                onChange={e => setName(e.target.value)}
+                className="border-2 border-gray-400 rounded text-center"
+              />
+              <div className="absolute top-3 text-red-600 font-semibold">{nameError}</div>
+              <button
+                className="transition-color font-bold rounded p-1 bg-blue-600 hover:bg-blue-500"
+                onClick={handleAddLeaderboard}>
+                Add to leaderboard
+              </button>
+            </form>
           ) : (
             <button className="transition-color font-bold rounded p-1 bg-blue-600 hover:bg-blue-500">
               View leaderboard
             </button>
           )}
+          <div>
+            <button
+              onClick={newGame}
+              className="transition-color font-bold rounded p-1 bg-blue-600 hover:bg-blue-500">
+              New Game!
+            </button>
+          </div>
         </div>
       </div>
     </section>
