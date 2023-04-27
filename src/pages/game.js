@@ -97,7 +97,7 @@ function Game() {
           newGame={randomWord}
         />
       )}
-      <section>
+      <section className="w-full overflow-x-hidden">
         <h1 className="text-6xl text-center font-bold w-screen">Hangman</h1>
         <div className=" flex justify-center w-screen">
           <div className="relative max-w-[500px] max-h-[500] overflow-hidden">
@@ -132,7 +132,7 @@ function Game() {
           </div>
         </div>
       </section>
-      <section className="bg-slate-200 h-20 md:mx-10 flex justify-center items-center gap-5">
+      <section className="bg-slate-200 h-20 md:mx-10 flex justify-center items-center gap-5 rounded-tl rounded-tr mt-2">
         {word &&
           word.split("").map((letter, index) => (
             <p
@@ -142,7 +142,7 @@ function Game() {
             </p>
           ))}
       </section>
-      <section className="bg-slate-200 md:mx-10 flex flex-col items-center h-24 border-t-2 border-slate-400">
+      <section className="bg-slate-200 md:mx-10 flex flex-col items-center h-24 border-t-2 border-slate-400 rounded-bl rounded-br">
         <h2 className="text-lg font-bold">Wrong Guesses</h2>
         <div className="flex justify-center items-center gap-5">
           {guessedLetters &&
@@ -157,7 +157,7 @@ function Game() {
               ))}
         </div>
       </section>
-      <section className="relative sm:mx-10">
+      <section className="relative sm:mx-10 mb-4">
         <div className="absolute bottom-0 left-1">
           <Link href={"/"}>
             <button className="transition-color font-bold rounded p-1 bg-blue-600 hover:bg-blue-500">
