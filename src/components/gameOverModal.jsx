@@ -1,7 +1,9 @@
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 function gameOverModal({ guessedLetters, wrongGuesses, word, won, newGame }) {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState("");
 
@@ -11,8 +13,20 @@ function gameOverModal({ guessedLetters, wrongGuesses, word, won, newGame }) {
       setNameError("Please enter a name");
       return;
     }
-    // TODO: Add to leaderboard
+    try {
+      fetch("/api/leaderboard", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, score: word.length - wrongGuesses, word }),
+      });
+    } catch (error) {
+      console.error("ERROR:", error);
+    }
+
     setNameError("");
+    router.push("/leaderboard");
   }
 
   return (
