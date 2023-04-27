@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 function gameOverModal({ guessedLetters, wrongGuesses, word, won, newGame }) {
   return (
@@ -29,6 +30,11 @@ function gameOverModal({ guessedLetters, wrongGuesses, word, won, newGame }) {
           <span className="text-lg">wrong guesses</span>
         </div>
         <div className="flex justify-evenly w-full">
+          <Link href={"/"}>
+            <button className="transition-color font-bold rounded p-1 bg-blue-600 hover:bg-blue-500">
+              Back to Home Page
+            </button>
+          </Link>
           <button
             onClick={newGame}
             className="transition-color font-bold rounded p-1 bg-blue-600 hover:bg-blue-500">

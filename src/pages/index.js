@@ -2,8 +2,11 @@
 
 import Head from "next/head";
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import Cryptr from "cryptr";
+import gallows from "public/images/gallows.svg";
+import hangman from "public/images/hangmanfigure.svg";
 
 export default function Home() {
   const cryptr = new Cryptr("HangmanGame", { pbkdf2Iterations: 1, saltLength: 0 });
@@ -21,22 +24,39 @@ export default function Home() {
         <link rel="manifest" href="/site.webmanifest" />
       </Head>
       <main>
-        <h1 className="text-3xl font-bold underline">Hangman!</h1>
-        <div className="flex p-3">
-          <div className="justify-center items-center flex flex-1  bg-slate-100 py-1">
+        <h1 className="text-6xl text-center font-bold">Hangman</h1>
+
+        <div className="relative mt-16 flex justify-center">
+          <Image
+            src={gallows}
+            alt="Gallows"
+            width={300}
+            className="absolute left-5 -top-16 -z-10 -rotate-12"
+          />
+          <Image
+            src={hangman}
+            alt="Hangman"
+            width={100}
+            className="absolute right-16 -top-10 -z-10 rotate-12"
+          />
+          <div className="justify-center items-center flex flex-col gap-5  bg-slate-200 rounded py-3 px-6">
             <label htmlFor="word" className="font-semibold">
               Enter a word:
             </label>
             <input
+              placeholder="Random word"
               type="text"
               id="word"
               name="word"
               value={word}
               onChange={event => setWord(event.target.value)}
-              className="mx-2"
+              className="mx-2 text-center"
             />
+            <small>Leave blank for random word</small>
             <Link href={word.length > 0 ? `/game?word=${cryptr.encrypt(word)}` : "/game"}>
-              <button className="font-semibold bg-teal-200 rounded-md p-1 ">New Game</button>
+              <button className="font-semibold transition-colors bg-teal-200 hover:bg-teal-300 rounded-md p-1 ">
+                New Game
+              </button>
             </Link>
           </div>
         </div>
