@@ -30,7 +30,7 @@ function gameOverModal({ guessedLetters, wrongGuesses, word, won, newGame }) {
   }
 
   return (
-    <section className="absolute w-screen h-full z-50">
+    <section className="fixed top-0 left-0 w-full h-full z-50 overflow-hidden">
       <div className="absolute w-screen h-full bg-neutral-600 opacity-40"></div>
       <div className="absolute top-1/2 left-0 sm:left-1/2 transform sm:-translate-x-1/2 -translate-y-1/2 w-full sm:w-2/3 lg:w-[900px] h-2/3 bg-slate-50 rounded flex flex-col items-center justify-around">
         <h2 className="text-3xl font-bold">{`${won ? "WINNER" : "GAME OVER"}!`}</h2>
