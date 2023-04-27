@@ -46,7 +46,7 @@ function leaderboard() {
         </p>
       </div>
       <section className="flex justify-center">
-        <table className="max-w-3xl w-11/12 sm:w-9/12 border-4 border-teal-800 mt-2">
+        <table className="border-spacing-0 opacity-90 max-w-3xl w-11/12 sm:w-9/12 border-4 border-teal-800 mt-2">
           <thead className="sticky -top-1">
             <tr className="bg-gray-300">
               <th>Rank</th>
