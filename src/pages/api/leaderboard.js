@@ -18,22 +18,18 @@ export default async function handler(req, res) {
     }
   }
   if (req.method === "POST") {
-    console.log("POST");
     const { name, score, word } = req.body;
-    console.table({ name, score, word });
     if (!name || !score || !word) {
       res.status(400).json({ error: "Missing name or score" });
       db.release();
       return;
     }
     try {
-      console.log("INSERT");
       await db.query(
         `INSERT INTO ${
           process.env.DB_SCHEMA || "public"
         }.leaderboard (name, score, word) VALUES ('${name}', ${score}, '${word}')`
       );
-      console.log("INSERTED");
     } catch (error) {
       res.status(500).json({ error: "Failed to insert score" });
       db.release();
