@@ -2,6 +2,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import Link from "next/link";
 import Cryptr from "cryptr";
 import gallows from "public/images/gallows.svg";
 import man from "public/images/hangmanfigure.svg";
@@ -11,66 +12,68 @@ function Game() {
   const router = useRouter();
   const cryptr = new Cryptr("HangmanGame", { pbkdf2Iterations: 1, saltLength: 0 });
 
-  const [isFetching, setIsFetching] = useState(false);
   const inputRef = useRef(null);
+  const encryptedWord = useRef(null);
+  const fetchOnTimeout = useRef(false);
   const [word, setWord] = useState("");
-  const [encryptedWord, setEncryptedWord] = useState(null);
   const [guessedLetters, setGuessedLetters] = useState([]);
   const [wrongGuesses, setWrongGuesses] = useState(0);
   const [guess, setGuess] = useState("");
   const [won, setWon] = useState(false);
 
-  // Fetch a random word from the API
-  async function randomWord() {
-    if (isFetching) return;
-    setIsFetching(true);
-    const response = await fetch("/api/randomWord");
-    const data = await response.json();
-    setEncryptedWord(cryptr.encrypt(data.word));
-  }
-
-  // Focus the input field on load
-  useEffect(() => {
-    if (wrongGuesses < 6 || won) inputRef.current.focus();
-  }, []);
-
   // Check query params for a word
   useEffect(() => {
     if (router.isReady) {
       const { word } = router.query;
-      if (word && word.length > 0) {
-        try {
-          cryptr.decrypt(word);
-          setEncryptedWord(word);
-        } catch (error) {
-          setEncryptedWord("");
-          return;
-        }
+      if (word) {
+        encryptedWord.current = word;
+        setup();
+      } else {
+        randomWord();
       }
     }
-  }, [router]);
+  }, [router.query.word]);
 
-  // New encrypted word
-  useEffect(() => {
-    if (encryptedWord === null) return;
-    if (encryptedWord === "") {
+  // Fetch a random word from the API
+  async function randomWord() {
+    if (fetchOnTimeout.current) return;
+    fetchTimeout();
+    const response = await fetch("/api/randomWord");
+    const data = await response.json();
+    encryptedWord.current = cryptr.encrypt(data.word);
+    setup();
+  }
+
+  // Fetch Timeout
+  function fetchTimeout() {
+    fetchOnTimeout.current = true;
+    setTimeout(() => {
+      fetchOnTimeout.current = false;
+    }, 5000);
+  }
+
+  // Setup Game
+  function setup() {
+    try {
+      setWord(cryptr.decrypt(encryptedWord.current).toUpperCase());
+    } catch (error) {
       randomWord();
       return;
     }
-    isFetching && setIsFetching(false);
-
-    router.push(`?word=${encryptedWord}`, undefined, { shallow: true });
-    setWord(cryptr.decrypt(encryptedWord));
-    //TESTING
-    console.log("word", cryptr.decrypt(encryptedWord));
+    router.push(`?word=${encryptedWord.current}`, undefined, { shallow: true });
     setGuessedLetters([]);
     setWrongGuesses(0);
-  }, [encryptedWord]);
+  }
+
+  // Focus the input field on load
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
   // Handle the guess input
   function handleGuess(event) {
     if (wrongGuesses > 5 || won) return;
-    const letter = event.target.value.split("")[0].toLowerCase();
+    const letter = event.target.value.split("")[0].toUpperCase();
     if (!guessedLetters.includes(letter)) {
       if (!word.includes(letter)) setWrongGuesses(wrongGuesses => wrongGuesses + 1);
       setGuessedLetters(guessedLetters => [...guessedLetters, letter]);
@@ -95,10 +98,10 @@ function Game() {
         />
       )}
       <section>
-        <h1 className="text-6xl text-center font-bold">Hangman</h1>
+        <h1 className="text-6xl text-center font-bold w-screen">Hangman</h1>
         <div className=" flex justify-center w-screen">
-          <div className="relative">
-            <Image src={gallows} alt="Gallows" width={500} />
+          <div className="relative max-w-[500px] max-h-[500] overflow-hidden">
+            <Image src={gallows} alt="Gallows" />
             <div className="absolute bottom-[12%] right-[16%] h-[40%] w-[15%] -z-10">
               <div
                 className={`${
@@ -154,19 +157,35 @@ function Game() {
               ))}
         </div>
       </section>
-      <section className="flex flex-col items-center">
-        <label className="text-xl" htmlFor="guess">
-          Guess a letter:
-        </label>
-        <input
-          className="border border-slate-700 w-10 text-2xl text-center rounded"
-          type="text"
-          id="guess"
-          name="guess"
-          value={guess}
-          onChange={handleGuess}
-          ref={inputRef}
-        />
+      <section className="relative sm:mx-10">
+        <div className="absolute bottom-0 left-1">
+          <Link href={"/"}>
+            <button className="transition-color font-bold rounded p-1 bg-blue-600 hover:bg-blue-500">
+              Home Page
+            </button>
+          </Link>
+        </div>
+        <div className="flex flex-col items-center">
+          <label className="text-xl" htmlFor="guess">
+            Guess a letter:
+          </label>
+          <input
+            className="border border-slate-700 w-10 text-2xl text-center rounded"
+            type="text"
+            id="guess"
+            name="guess"
+            value={guess}
+            onChange={handleGuess}
+            ref={inputRef}
+          />
+        </div>
+        <div className="absolute bottom-0 right-1">
+          <Link href="/leaderboard">
+            <button className="font-semibold transition-colors bg-blue-600 hover:bg-blue-500 rounded-md p-1 ">
+              Leaderboard
+            </button>
+          </Link>
+        </div>
       </section>
     </>
   );

@@ -59,7 +59,7 @@ function leaderboard() {
             {leaderboard ? (
               leaderboard.length === 0 ? (
                 <tr>
-                  <td colSpan="4" className="text-center">
+                  <td colSpan="4" className="text-center bg-slate-100">
                     No entries yet
                   </td>
                 </tr>
@@ -77,7 +77,7 @@ function leaderboard() {
               )
             ) : (
               <tr>
-                <td colSpan="4" className="text-center">
+                <td colSpan="4" className="text-center bg-slate-100">
                   Loading...
                 </td>
               </tr>

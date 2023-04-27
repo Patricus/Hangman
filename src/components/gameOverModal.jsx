@@ -30,8 +30,8 @@ function gameOverModal({ guessedLetters, wrongGuesses, word, won, newGame }) {
   }
 
   return (
-    <section className="absolute w-screen h-screen z-50">
-      <div className="w-full h-full bg-neutral-600 opacity-40"></div>
+    <section className="absolute w-screen h-full z-50">
+      <div className="absolute w-sreen h-full bg-neutral-600 opacity-40"></div>
       <div className="absolute top-1/2 left-0 sm:left-1/2 transform sm:-translate-x-1/2 -translate-y-1/2 w-full sm:w-2/3 lg:w-[900px] h-2/3 bg-slate-50 rounded flex flex-col items-center justify-around">
         <h2 className="text-3xl font-bold">{`${won ? "WINNER" : "GAME OVER"}!`}</h2>
         <div>
@@ -82,9 +82,11 @@ function gameOverModal({ guessedLetters, wrongGuesses, word, won, newGame }) {
               </button>
             </form>
           ) : (
-            <button className="transition-color font-bold rounded p-1 bg-blue-600 hover:bg-blue-500">
-              View Leaderboard
-            </button>
+            <Link href="/leaderboard">
+              <button className="font-semibold transition-colors bg-blue-600 hover:bg-blue-500 rounded-md p-1 ">
+                Leaderboard
+              </button>
+            </Link>
           )}
           <div>
             <button
