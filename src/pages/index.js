@@ -58,6 +58,11 @@ export default function Home() {
                 New Game
               </button>
             </Link>
+            <Link href="/leaderboard">
+              <button className="font-semibold transition-colors bg-blue-600 hover:bg-blue-500 rounded-md p-1 ">
+                Leaderboard
+              </button>
+            </Link>
           </div>
         </div>
       </main>

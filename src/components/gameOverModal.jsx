@@ -64,12 +64,12 @@ function gameOverModal({ guessedLetters, wrongGuesses, word, won, newGame }) {
               <button
                 className="transition-color font-bold rounded p-1 bg-blue-600 hover:bg-blue-500"
                 onClick={handleAddLeaderboard}>
-                Add to leaderboard
+                Add to Leaderboard
               </button>
             </form>
           ) : (
             <button className="transition-color font-bold rounded p-1 bg-blue-600 hover:bg-blue-500">
-              View leaderboard
+              View Leaderboard
             </button>
           )}
           <div>
